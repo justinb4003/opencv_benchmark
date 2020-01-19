@@ -48,7 +48,13 @@ def setHV(v):
     global highThresh
     highThresh.val = v 
 
+
 def create_hsv_trackbars():
+    """
+    Not currently used anymore, nor are the boring functions above that
+    I wish I could stick in a lambda...
+    Still handy if you want to re-threshold an image though.
+    """
     global lowThresh, highThresh
     cv2.namedWindow(wnd_main)
     cv2.createTrackbar('Low Hue', wnd_main, lowThresh.hue, 255, setLH)
@@ -61,30 +67,30 @@ def create_hsv_trackbars():
 
 
 def calculate_target_sim(img):
+    """
+    Run some calculations, basically simulate finding a target.
+    """
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    low = (lowThresh.hue, lowThresh.sat, lowThresh.val)
-    high = (highThresh.hue, highThresh.sat, highThresh.val)
     # print("filtering with low {} and high {}".format(low, high))
-    thresh = cv2.inRange(hsv, low, high)
-    res = cv2.bitwise_and(img, img, mask=thresh)
+    # lowThresh = HSV(46, 47, 126)
+    # highThresh = HSV(106, 255, 249)
+    # low = (lowThresh.hue, lowThresh.sat, lowThresh.val)
+    # high = (highThresh.hue, highThresh.sat, highThresh.val)
+    # We'll skip the data reformatting and just use the raw values now
+    # to keep the focus on making things fast
+    thresh = cv2.inRange(hsv, (46, 47, 126), (106, 255, 249))
+    # res = cv2.bitwise_and(img, img, mask=thresh)
     conts, hier = cv2.findContours(thresh, cv2.RETR_TREE,
                                    cv2.CHAIN_APPROX_SIMPLE)
-    if gui:
-        cv2.drawContours(res, conts, -1, (0, 0, 255), 2)
-        cv2.imshow('output', res)
-        cv2.waitKey(25)
 
 
 def main():
-    if gui is True and 42 == 0:
-        create_hsv_trackbars()
-
     img = cv2.imread('target1.jpg')
     fc = 10_000
-    with Timer(factor=1000) as t:
+    with Timer(factor=1) as t:
         for x in range(fc):
             calculate_target_sim(img)
-    print("Time elapsed (ms) for run of {} frames is {}".format(fc, t.elapsed))
+    print("Time in seconds: {} ({} loops)".format(t.elapsed, fc))
     if gui:
         print("Waiting for key...")
         cv2.waitKey(0)
