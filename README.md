@@ -1,4 +1,4 @@
-== OpenCV Bencnmarking ==
+## OpenCV Bencnmarking 
 
 Comparing Python and C++ implementations of OpenCV for performance.  The idea
 is to expose a possible pitfal of doing it one way in Python that works but
