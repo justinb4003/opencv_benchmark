@@ -1,0 +1,9 @@
+Back to back runs showed C++ and Python coming in really close to one another
+for this simple test.
+
+(venv-ob) jbuist@jbz620deb:~/robotics_git/opencv_benchmark/test_simple$ !g++
+g++ -ggdb test_simple.cpp -o test_simple `pkg-config --cflags --libs opencv4`
+(venv-ob) jbuist@jbz620deb:~/robotics_git/opencv_benchmark/test_simple$ ./test_simple
+Time in seconds: 13.6171 (10000 loops)
+(venv-ob) jbuist@jbz620deb:~/robotics_git/opencv_benchmark/test_simple$ ./test_simple.py
+Time in seconds: 13.683044948033057 (10000 loops)
